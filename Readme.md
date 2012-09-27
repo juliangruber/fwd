@@ -54,6 +54,20 @@ fwd(src, dest, {'wrong': JSON.stringify})
 
 ```
 
+### Stream → Stream
+
+```javascript
+var src = new Stream();
+src.readable = true;
+var dest = new Stream();
+dest.writable = true;
+
+fwd(src, dest, function(data) {
+  return data*2;
+});
+
+```
+
 ### Rules
 
 You can rewrite data on-the-fly:
