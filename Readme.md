@@ -10,6 +10,18 @@ $ component install juliangruber/fwd
 $ npm install fwd
 ```
 
+## Current state
+
+* ✔ EventEmitter → EventEmitter
+* ◦ Stream → EventEmitter
+* ◦ EventEmitter → Stream
+* ◦ Stream → Stream
+* ◦ Rules
+  * ◦ event
+  * ◦ [rules]
+  * ◦ {mapping}
+  * ◦ fn
+
 ## Usage
 
 ### EventEmitter → EventEmitter

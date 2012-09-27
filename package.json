@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "description": "Forward one (emitter|stream)'s events to another",
   "main": "index.js",
+  "devDependencies": {
+    "mocha": "*",
+    "expect.js": "*"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/juliangruber/fwd"
