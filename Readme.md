@@ -17,6 +17,7 @@ $ npm install fwd
 var fwd = require('fwd');
 var Stream = require('stream');
 var EventEmitter = require('events').EventEmitter;
+// or: var EventEmitter = require('emitter')
 
 var src = new EventEmitter();
 var dest = new EventEmitter();
