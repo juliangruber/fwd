@@ -36,10 +36,28 @@ describe('fwd', function() {
       dest.writable = true;
       fwd(src, dest, 'event');
       dest.write = function(data) {
+        expect(data).to.not.be('bad');
         expect(data).to.be('my-data');
         done();
       }
+      src.emit('else', 'bad');
       src.emit('event', 'my-data');
     });
+  });
+  describe('fwd(s, s)', function() {
+    it('should forward all data', function(done) {
+      var src = new Stream();
+      src.readable = true;
+      var dest = new Stream();
+      dest.writable = true;
+
+      fwd(src, dest);
+
+      dest.write = function(data) {
+        expect(data).to.be('my-data');
+        done();
+      }
+      src.emit('data', 'my-data');
+    })
   });
 });
