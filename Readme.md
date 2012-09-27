@@ -120,6 +120,14 @@ Apply `fn` to
 
 `fn` can also appear inside mappings.
 
+## Tests
+
+```bash
+$ git clone https://github.com/juliangruber/fwd.git && cd fwd
+$ npm install
+$ mocha
+```
+
 ## License
 
 Copyright (c) 2012 Julian Gruber &lt;julian@juliangruber.com&gt;
