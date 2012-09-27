@@ -60,8 +60,8 @@ var src = new EventEmitter();
 var dest = new Stream();
 dest.writable = true;
 
-fwd(src, dest, {'entry': 'data'});
-fwd(src, dest, {'wrong': JSON.stringify})
+fwd(src, dest, 'entry');
+fwd(src, dest, {'wrong': JSON.stringify});
 ```
 
 ### Stream → Stream

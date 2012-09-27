@@ -1,4 +1,3 @@
-var fwd = require('../index');
 var Emitter = require('events').EventEmitter;
 var Stream = require('stream');
 var expect = require('expect.js');
