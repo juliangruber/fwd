@@ -2,9 +2,11 @@
   "name": "fwd",
   "repo": "juliangruber/fwd",
   "description": "Forward one (emitter|stream)'s events to another",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "keywords": [],
-  "dependencies": {},
+  "dependencies": {
+    "juliangruber/stream": "*"
+  },
   "development": {},
   "scripts": [
     "index.js"
