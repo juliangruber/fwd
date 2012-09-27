@@ -1,0 +1,20 @@
+{
+  "name": "fwd",
+  "version": "0.0.1",
+  "description": "Forward one (emitter|stream)'s events to another",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/juliangruber/fwd"
+  },
+  "keywords": [
+    "forward",
+    "emitter",
+    "event",
+    "eventemitter",
+    "stream",
+    "glue"
+  ],
+  "author": "Julian Gruber <julian@juliangruber.com>",
+  "license": "MIT"
+}
