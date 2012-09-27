@@ -29,4 +29,17 @@ describe('fwd', function() {
       src.emit('data', 'mydata');
     });
   });
+  describe('fwd(ee, s)', function() {
+    it('should forward all data', function(done) {
+      var src = new Emitter();
+      var dest = new Stream();
+      dest.writable = true;
+      fwd(src, dest, 'event');
+      dest.write = function(data) {
+        expect(data).to.be('my-data');
+        done();
+      }
+      src.emit('event', 'my-data');
+    });
+  });
 });

@@ -7,7 +7,11 @@ function fwd(src, dest, rules) {
     src.emit = function() {
       var args = [].slice.call(arguments);
       args = fwd.applyRules(rules, args);
-      dest.emit.apply(dest, args);
+      if (dest instanceof Stream) {
+        dest.write(args[1]);
+      } else {
+        dest.emit.apply(dest, args);
+      }
       emit.apply(src, arguments);
     }
   }

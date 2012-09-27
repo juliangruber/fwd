@@ -14,7 +14,7 @@ $ npm install fwd
 
 * ✔ EventEmitter → EventEmitter
 * ✔ Stream → EventEmitter
-* ◦ EventEmitter → Stream
+* ✔ EventEmitter → Stream
 * ◦ Stream → Stream
 * ◦ Rules
   * ◦ event
