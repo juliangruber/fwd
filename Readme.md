@@ -29,7 +29,6 @@ dest.on('event', function() {
 });
 
 src.emit('event');
-
 ```
 
 ### Stream → EventEmitter
@@ -51,7 +50,6 @@ dest.writable = true;
 
 fwd(src, dest, {'entry': 'data'});
 fwd(src, dest, {'wrong': JSON.stringify})
-
 ```
 
 ### Stream → Stream
@@ -65,7 +63,6 @@ dest.writable = true;
 fwd(src, dest, function(data) {
   return data*2;
 });
-
 ```
 
 ### Rules
