@@ -13,7 +13,7 @@ $ npm install fwd
 ## Current state
 
 * ✔ EventEmitter → EventEmitter
-* ◦ Stream → EventEmitter
+* ✔ Stream → EventEmitter
 * ◦ EventEmitter → Stream
 * ◦ Stream → Stream
 * ◦ Rules

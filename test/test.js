@@ -9,8 +9,24 @@ describe('fwd', function() {
       var src = new Emitter();
       var dest = new Emitter();
       fwd(src, dest);
-      dest.on('event', done);
-      src.emit('event');
+      dest.on('event', function(data) {
+        expect(data).to.be('data');
+        done();
+      });
+      src.emit('event', 'data');
+    });
+  });
+  describe('fwd(s, ee)', function() {
+    it('should forward all data', function(done) {
+      var src = new Stream();
+      src.readable = true;
+      var dest = new Emitter();
+      fwd(src, dest, {'data': 'event'});
+      dest.on('event', function(data) {
+        expect(data).to.be('mydata');
+        done();
+      });
+      src.emit('data', 'mydata');
     });
   });
 });
