@@ -2,6 +2,7 @@ var fwd = require('../index');
 var Emitter = require('events').EventEmitter;
 var Stream = require('stream');
 var expect = require('expect.js');
+var EmitterComponent = require('emitter-component');
 
 describe('fwd', function() {
   describe('fwd(ee, ee)', function() {
@@ -300,6 +301,18 @@ describe('fwd', function() {
       fwd(src, dest);
       src.emit('data', '13');
       src.emit('end');
+    });
+  });
+  describe('compatibility', function() {
+    it('should be compatible with component/emitter', function(done) {
+      var src = new EmitterComponent();
+      var dest = new EmitterComponent();
+      fwd(src, dest);
+      dest.on('sky', function(data) {
+        expect(data).to.be('open');
+        done();
+      });
+      src.emit('sky', 'open');
     });
   });
 });

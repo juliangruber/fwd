@@ -5,7 +5,8 @@
   "main": "index.js",
   "devDependencies": {
     "mocha": "*",
-    "expect.js": "*"
+    "expect.js": "*",
+    "emitter-component": "*"
   },
   "repository": {
     "type": "git",

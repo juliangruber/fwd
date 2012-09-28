@@ -3,6 +3,8 @@
 
 Forward one `(emitter|stream)`'s events to another -> connect parts of your application whose interface you have no control over.
 
+This is compatible both with the node-core EventEmitter and with [component/emitter](https://github.com/component/emitter).
+
 ## Installation
 
 ```bash
