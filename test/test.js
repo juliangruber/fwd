@@ -128,16 +128,27 @@ describe('fwd', function() {
     });
   });
   describe('fwd(s, ee)', function() {
-    it('should forward all data', function(done) {
-      var src = new Stream();
+    var src, dest;
+    beforeEach(function() {
+      src = new Stream();
       src.readable = true;
-      var dest = new Emitter();
+      dest = new Emitter();
+    })
+    it('should forward all data', function(done) {
       fwd(src, dest, {'data': 'event'});
       dest.on('event', function(data) {
         expect(data).to.be('mydata');
         done();
       });
       src.emit('data', 'mydata');
+    });
+    it('should end', function() {
+      fwd(src, dest);
+      src.emit('end');
+      dest.on('data', function() {
+        throw new Error("didn't end");
+      }); 
+      src.emit('data', 'whoo');
     });
   });
   describe('fwd(ee, s)', function() {
@@ -155,12 +166,14 @@ describe('fwd', function() {
     });
   });
   describe('fwd(s, s)', function() {
-    it('should forward all data', function(done) {
-      var src = new Stream();
+    var src, dest;
+    beforeEach(function() {
+      src = new Stream();
       src.readable = true;
-      var dest = new Stream();
+      dest = new Stream();
       dest.writable = true;
-
+    })
+    it('should forward all data', function(done) {
       fwd(src, dest);
 
       dest.write = function(data) {
@@ -168,6 +181,90 @@ describe('fwd', function() {
         done();
       }
       src.emit('data', 'my-data');
-    })
+    });
+    it('should end', function(done) {
+      fwd(src, dest);
+      dest.end = done; 
+      src.emit('end');
+    });
+    it('should apply a function', function(done) {
+      fwd(src, dest, function(data) {
+        return data+'-changed';
+      });
+      dest.write = function(data) {
+        expect(data).to.be('value-changed');
+        done();
+      }
+      src.emit('data', 'value');
+    });
+  });
+  describe('acceptance', function() {
+    var src, dest;
+    beforeEach(function() {
+      src = new Stream;
+      src.readable = true
+
+      var times = 0;
+      var iv = setInterval(function () {
+        src.emit('data', times + '\n');
+        if (++times === 5) {
+          src.emit('end');
+          clearInterval(iv);
+        }
+      }, 1);
+     
+      dest = new Stream;
+      dest.writable = true;
+
+      dest.bytes = 0;
+
+      dest.write = function (buf) {
+        if (typeof buf == 'undefined') return;
+        dest.bytes += buf.length;
+      };
+
+      dest.end = function (buf) {
+        if (arguments.length) dest.write(buf);
+        dest.writable = false;
+      };
+
+      dest.destroy = function () {
+        dest.writable = false;
+      };
+    });
+    it('should pipe', function(done) {
+      dest.end = function(buf) {
+        if (arguments.length) dest.write(buf);
+        dest.writable = false;
+        expect(dest.bytes).to.be(20);
+        done();
+      };
+      fwd(src, dest, function(data) {
+        return data+data;
+      });
+    });
+    it('should fwd stream to emitter', function(done) {
+      var dest = new Emitter();
+      var bytes = 0;
+      dest.on('data', function(data) {
+        bytes += data.length;
+        if (bytes==10) done();
+      });
+      fwd(src, dest, ['data', {'end': function(event, data) {
+        if (data) event = 'data';
+        return {event:event, data:data};
+      }}]);
+    });
+    it('should fwd emitter to stream', function(done) {
+      var src = new Emitter();
+      dest.end = function(buf) {
+        if (arguments.length) dest.write(buf);
+        expect(dest.bytes).to.be(2);
+        done();
+      };
+      fwd(src, dest);
+      src.emit('data', '13');
+      src.emit('end');
+    });
   });
 });

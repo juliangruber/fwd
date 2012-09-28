@@ -1,6 +1,6 @@
 {
   "name": "fwd",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Forward one (emitter|stream)'s events to another",
   "main": "index.js",
   "devDependencies": {

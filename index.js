@@ -2,19 +2,27 @@ var Stream = require('stream');
 
 function fwd(src, dest, rules) {
   var emit = src.emit;
+  if (src.pipe && dest.pipe) {
+    var transformer = new Stream();
+    transformer.readable = true;
+    transformer.writable = true;
+    transformer.write = function(data) {
+      data = fwd.applyRules(rules, ['data'].concat(data));
+      if (!data) return;
+      this.emit.apply(this, data);
+    };
+    transformer.end = function() { this.emit('end') };
+    transformer.destroy = function() { this.emit('close') };
+    return src.pipe(transformer).pipe(dest);
+  }
   src.emit = function() {
     var args = [].slice.call(arguments);
-    if (!(args = fwd.applyRules(rules, args))) return;
-    if (src.pipe && dest.pipe) {
-      var transmitter = new Stream();
-      transmitter.readable = true;
-      transmitter.pipe(dest);
-      transmitter.emit('data', args[1]);
-    } else if (dest.pipe) {
-      dest.write(args[1]);
-    } else {
-      dest.emit.apply(dest, args);
-    }
+    args = fwd.applyRules(rules, args);
+    if ((src.pipe || dest.pipe) && args[0] == 'end') src.emit = emit;
+    if (dest.pipe && args[0] == 'end') return dest.end.apply(args.splice(1));
+    if (!args) return;
+    if (dest.pipe) return dest.write(args[1]);
+    dest.emit.apply(dest, args);
     emit.apply(src, arguments);
   }
 }
