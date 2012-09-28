@@ -120,6 +120,10 @@ Apply `fn` to
 
 `fn` can also appear inside mappings.
 
+### stop()
+
+`stop` is returned by every `fwd`-call, so you can stop forwarding. Use this as stream-unpipe which isn't in the stream class yet.
+
 ## Tests
 
 ```bash

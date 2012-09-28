@@ -3,17 +3,22 @@ var Stream = require('stream');
 function fwd(src, dest, rules) {
   var emit = src.emit;
   if (src.pipe && dest.pipe) {
+    var active = true; // so this can be stopped
     var transformer = new Stream();
     transformer.readable = true;
     transformer.writable = true;
     transformer.write = function(data) {
+      if (!active) return;
       data = fwd.applyRules(rules, ['data'].concat(data));
       if (!data) return;
       this.emit.apply(this, data);
     };
-    transformer.end = function() { this.emit('end') };
-    transformer.destroy = function() { this.emit('close') };
-    return src.pipe(transformer).pipe(dest);
+    transformer.end = function() { if (active) this.emit('end') };
+    transformer.destroy = function() { if (active) this.emit('close') };
+    src.pipe(transformer).pipe(dest);
+    return function stop() {
+      active = false;
+    }
   }
   src.emit = function() {
     var args = [].slice.call(arguments);
@@ -24,6 +29,9 @@ function fwd(src, dest, rules) {
     if (dest.pipe) return dest.write(args[1]);
     dest.emit.apply(dest, args);
     emit.apply(src, arguments);
+  }
+  return function stop() {
+    src.emit = emit;
   }
 }
 

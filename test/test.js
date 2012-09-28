@@ -126,6 +126,14 @@ describe('fwd', function() {
       src.emit('unchanged', 'data');
       src.emit('change-me', 'data');
     });
+    it('should stop', function() {
+      var stop = fwd(src, dest);
+      stop();
+      dest.on('foo', function() {
+        throw new Error("didn't stop");
+      });
+      src.emit('foo');
+    });
   });
   describe('fwd(s, ee)', function() {
     var src, dest;
@@ -150,12 +158,23 @@ describe('fwd', function() {
       }); 
       src.emit('data', 'whoo');
     });
+    it('should stop', function() {
+      var stop = fwd(src, dest);
+      stop();
+      dest.on('data', function() {
+        throw new Error("didn't stop");
+      });
+      src.emit('data', 'sth');
+    });
   });
   describe('fwd(ee, s)', function() {
-    it('should forward all data', function(done) {
-      var src = new Emitter();
-      var dest = new Stream();
+    var src, dest;
+    beforeEach(function() {
+      src = new Emitter();
+      dest = new Stream();
       dest.writable = true;
+    });
+    it('should forward all data', function(done) {
       fwd(src, dest, 'event');
       dest.write = function(data) {
         expect(data).to.be('my-data');
@@ -163,6 +182,14 @@ describe('fwd', function() {
       }
       src.emit('else', 'bad');
       src.emit('event', 'my-data');
+    });
+    it('should stop', function() {
+      var stop = fwd(src, dest);
+      stop();
+      dest.write = function() {
+        throw new Error("didn't stop");
+      }
+      src.emit('data', 'sth');
     });
   });
   describe('fwd(s, s)', function() {
@@ -196,6 +223,14 @@ describe('fwd', function() {
         done();
       }
       src.emit('data', 'value');
+    });
+    it('should stop', function() {
+      var stop = fwd(src, dest);
+      stop();
+      dest.write = function() {
+        throw new Error("didn't stop");
+      }
+      src.emit('data', 'sth');
     });
   });
   describe('acceptance', function() {
