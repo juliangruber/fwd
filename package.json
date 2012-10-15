@@ -1,12 +1,15 @@
 {
   "name": "fwd",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Forward one (emitter|stream)'s events to another",
   "main": "index.js",
   "devDependencies": {
     "mocha": "*",
     "expect.js": "*",
     "emitter-component": "*"
+  },
+  "scripts": {
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
