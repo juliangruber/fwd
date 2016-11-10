@@ -5,7 +5,7 @@
   "main": "index.js",
   "devDependencies": {
     "mocha": "*",
-    "expect.js": "*",
+    "expect.js": ">=0.3.1",
     "emitter-component": "*"
   },
   "scripts": {
