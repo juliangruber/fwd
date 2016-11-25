@@ -4,7 +4,7 @@
   "description": "Forward one (emitter|stream)'s events to another",
   "main": "index.js",
   "devDependencies": {
-    "mocha": "*",
+    "mocha": ">=3.2.0",
     "expect.js": "*",
     "emitter-component": "*"
   },
